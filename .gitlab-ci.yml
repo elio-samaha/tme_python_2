@@ -1,0 +1,11 @@
+image: python:latest
+
+stages:
+- test
+
+1-eps_cl:
+  script: python3 test-1-next_config.py
+
+2-reach:
+  script: python3 test-2-is_in_LA.py
+
