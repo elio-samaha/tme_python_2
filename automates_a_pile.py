@@ -74,14 +74,37 @@ def next_configs(a,c,w):
     # a : automate a pile
     # c : configuration (etat,pile)
     # w : mot represente par une liste
-    # A COMPLETER
-    return
+    res = []
+    q,s=c
+    _,_,_,t_rel,_,_,_,_,eq_st=a
+    for ((qr,zr,xr),(nqr,wr)) in t_rel:
+        if eq_st(q,qr) and ((len(s)==0 and zr==None) or (len(s)>0 and s[0]==zr)):
+            if xr==None:
+                res.append(((nqr,wr+s[1::]),w))
+            if len(w)>0 and xr==w[0]:
+                res.append(((nqr,wr+s[1::]),w[1::]))
+    return res
 
 def is_in_LA(a,w):
     # a : automate a pile
     # w : mot represente par une liste
-    # A COMPLETER
-    return
+    st,alph,stack_alph,t_rel,init_st,init_stack,accept_mode,final_st,eq_st=a
+    lst=[((init_st,[init_stack]),w)]
+    while(len(lst)>0):
+        elem=lst.pop(0)
+        c,w=elem
+        q,s=c
+        if accept_mode==0:
+            if len(s)==0:
+                if len(w)==0:
+                    return True
+            lst=lst+next_configs(a,c,w)
+        else:
+            if len(w)==0:
+                if is_in(eq_st,q,final_st):
+                    return True
+            lst=lst+next_configs(a,c,w)
+    return False
 
 
 
